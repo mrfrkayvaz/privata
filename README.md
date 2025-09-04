@@ -1,8 +1,9 @@
 # 🛡️ Privata
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/mrfrkayvaz/privata.svg?style=flat-square)](https://packagist.org/packages/mrfrkayvaz/privata)
-[![Total Downloads](https://img.shields.io/packagist/dt/mrfrkayvaz/privata.svg?style=flat-square)](https://packagist.org/packages/mrfrkayvaz/privata)
-[![License](https://img.shields.io/packagist/l/mrfrkayvaz/privata.svg?style=flat-square)](https://packagist.org/packages/mrfrkayvaz/privata)
+[![License](https://img.shields.io/packagist/l/mrfrkayvaz/privata?style=flat-square)](https://packagist.org/packages/mrfrkayvaz/privata)
+[![Total Downloads](https://img.shields.io/packagist/dt/mrfrkayvaz/privata?style=flat-square)](https://packagist.org/packages/mrfrkayvaz/privata)
+![GitHub stars](https://img.shields.io/github/stars/mrfrkayvaz/privata?style=flat-square)
 
 A comprehensive Laravel package that provides tools for masking, anonymizing, and managing personal data to help with privacy compliance. Privata offers automatic encryption, data masking, and secure storage capabilities for sensitive information.
 
