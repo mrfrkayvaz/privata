@@ -1,4 +1,4 @@
-# Privata
+# 🛡️ Privata
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/mrfrkayvaz/privata.svg?style=flat-square)](https://packagist.org/packages/mrfrkayvaz/privata)
 [![Total Downloads](https://img.shields.io/packagist/dt/mrfrkayvaz/privata.svg?style=flat-square)](https://packagist.org/packages/mrfrkayvaz/privata)
