@@ -68,16 +68,16 @@ final class AES implements Encrypter {
     /**
      * Encrypt the given plaintext using AES-256-CBC.
      *
-     * @param string $plaintext The text to encrypt
+     * @param string $value The text to encrypt
      * @return string The encrypted data as base64 encoded string
      * @throws EncryptionException When encryption fails
      */
-    public function encrypt(string $plaintext): string
+    public function encrypt(string $value): string
     {
         $key = $this->generateKey();
         $iv = $this->generateIV();
 
-        $encrypted = openssl_encrypt($plaintext, $this->cipher, $key, OPENSSL_RAW_DATA, $iv);
+        $encrypted = openssl_encrypt($value, $this->cipher, $key, OPENSSL_RAW_DATA, $iv);
 
         if ($encrypted === false) {
             throw new EncryptionException(
@@ -92,14 +92,14 @@ final class AES implements Encrypter {
     /**
      * Decrypt the given encrypted message using AES-256-CBC.
      *
-     * @param string $message The base64 encoded encrypted data
+     * @param string $value The base64 encoded encrypted data
      * @return string The decrypted plaintext
      * @throws DecryptionException
      */
-    public function decrypt(string $message): string
+    public function decrypt(string $value): string
     {
         $key = $this->generateKey();
-        $data = base64_decode($message);
+        $data = base64_decode($value);
 
         if ($data === false || strlen($data) <= $this->getIVLength()) {
             throw new DecryptionException(
