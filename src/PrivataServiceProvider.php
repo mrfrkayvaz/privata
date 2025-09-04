@@ -3,6 +3,7 @@
 namespace Privata;
 
 use Illuminate\Support\ServiceProvider;
+use Privata\Services\PrivataManager;
 
 class PrivataServiceProvider extends ServiceProvider
 {
@@ -15,10 +16,8 @@ class PrivataServiceProvider extends ServiceProvider
             __DIR__.'/../config/privata.php', 'privata'
         );
 
-        $this->app->singleton('privata', function () {
-            return new PrivataManager(
-                config('privata')
-            );
+        $this->app->singleton(PrivataManager::class, function () {
+            return new PrivataManager();
         });
     }
 

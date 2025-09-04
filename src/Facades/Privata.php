@@ -3,12 +3,15 @@
 namespace Privata\Facades;
 
 use Illuminate\Support\Facades\Facade;
+use Privata\Services\PrivataManager;
 
+/**
+ * @method static string encrypt(string $value)
+ * @method static string decrypt(string $value)
+ * @see PrivataManager
+ */
 class Privata extends Facade
 {
-    /**
-     * Get the registered name of the component.
-     */
     protected static function getFacadeAccessor(): string
     {
         return PrivataManager::class;

@@ -3,12 +3,13 @@
 namespace Privata\Exceptions;
 
 use Exception;
+use Throwable;
 
 class EncryptionException extends Exception
 {
     public function __construct(
         string $message,
-        string $algorithm,
+        public string $algorithm,
         int $code = 0,
         ?Throwable $previous = null
     ) {

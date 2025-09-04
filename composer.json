@@ -16,7 +16,8 @@
   },
   "autoload": {
     "psr-4": {
-      "Privata\\": "src/"
+      "Privata\\": "src/",
+      "Privata\\Tests\\": "tests"
     }
   },
   "autoload-dev": {
@@ -35,5 +36,15 @@
     }
   },
   "minimum-stability": "stable",
-  "prefer-stable": true
+  "prefer-stable": true,
+  "require-dev": {
+    "orchestra/testbench": "^10.6",
+    "pestphp/pest": "^4.0",
+    "pestphp/pest-plugin-laravel": "^4.0"
+  },
+  "config": {
+    "allow-plugins": {
+      "pestphp/pest-plugin": true
+    }
+  }
 }

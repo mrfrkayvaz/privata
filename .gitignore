@@ -27,6 +27,7 @@ Thumbs.db
 
 /coverage/
 /.phpunit.result.cache
+/.phpunit.cache
 /phpunit.xml
 
 *.log

@@ -16,118 +16,56 @@ return [
         | Driver
         |--------------------------------------------------------------------------
         |
-        | The encryption driver to be used. Available drivers: "aes-256-cbc",
-        | "aes-256-gcm", "chacha20-poly1305". Each driver may require
-        | different handling of keys and IVs.
+        | The encryption driver to be used for securing sensitive data.
+        | Supported: "aes"
+        |
+        | You may also customize how the encryption is handled by providing
+        | driver-specific configuration (e.g., key length, IV handling).
         |
         */
-        'driver' => env('PRIVATA_ENCRYPTION_DRIVER', 'aes-256-cbc'),
+        'driver' => env('PRIVATA_ENCRYPTION_DRIVER', 'aes'),
 
         /*
         |--------------------------------------------------------------------------
-        | Encryption Key
+        | Masking Character
         |--------------------------------------------------------------------------
         |
-        | This key is used by the Privata encryption service. It should be a random,
-        | 32-byte (256-bit) string to ensure maximum security. You must set this
-        | value before using the package in production. For convenience, you can
-        | generate a secure key using:
-        |
-        |   php artisan privata:key
-        |
-        | or with the built-in PHP helper:
-        |
-        |   base64_encode(random_bytes(32))
-        |
-        | Keep this key secret and never share it publicly. Changing the key will
-        | make previously encrypted data unreadable.
+        | The character that will be used to mask sensitive data when decrypted
+        | values should not be exposed. Typically, an asterisk (*) is used,
+        | but you may change this to any character of your choice.
         |
         */
-        'key' => env('PRIVATA_ENCRYPTION_KEY'),
-
-        /*
-        |--------------------------------------------------------------------------
-        | Use Random IV/Nonce
-        |--------------------------------------------------------------------------
-        |
-        | When enabled, a new random IV (for AES-CBC) or nonce (for AES-GCM/ChaCha20)
-        | is generated for each encryption operation. This is recommended and
-        | ensures that the same plaintext produces different ciphertexts.
-        |
-        */
-        'use_random_iv' => true,
-
-        /*
-        |--------------------------------------------------------------------------
-        | Base64 Encoding
-        |--------------------------------------------------------------------------
-        |
-        | Determines whether the encrypted payload should be Base64-encoded
-        | before being stored in the database. Recommended: true, since most
-        | databases expect text-safe values.
-        |
-        */
-        'base64' => true,
-
-        /*
-        |--------------------------------------------------------------------------
-        | Integrity Check
-        |--------------------------------------------------------------------------
-        |
-        | When enabled, an authentication tag (HMAC or AEAD tag) will be stored
-        | and verified during decryption. For AES-GCM and ChaCha20-Poly1305,
-        | this is built-in. For AES-CBC, an HMAC will be added.
-        |
-        */
-        'integrity_check' => true
+        'masking_character' => '*',
     ],
 
     /*
     |--------------------------------------------------------------------------
-    | Data Masking Configuration
+    | Encryption Drivers
     |--------------------------------------------------------------------------
     |
-    | This option controls how personal data is masked when displayed.
+    | Here you may configure all the available encryption drivers and their
+    | specific settings. Each driver may require its own options such as
+    | keys, ciphers, or other parameters.
+    |
+    | By default, the "aes" driver is available, but you may add custom
+    | drivers here if your application requires different algorithms.
     |
     */
-
-    'masking' => [
+    'drivers' => [
         /*
         |--------------------------------------------------------------------------
-        | Default Mask Character
+        | AES Driver
         |--------------------------------------------------------------------------
         |
-        | The character used to mask sensitive data.
+        | Configuration options for the AES encryption driver.
+        | - "key" should be a secure, random key (usually pulled from env).
+        | - "cipher" defines the AES variant (e.g., aes-256-cbc).
         |
         */
-        'character' => '*',
-
-        /*
-        |--------------------------------------------------------------------------
-        | Masking Rules
-        |--------------------------------------------------------------------------
-        |
-        | Define custom masking rules for different data types.
-        | You can use regex patterns or specific field names.
-        |
-        */
-        'rules' => [
-            'email' => [
-                'pattern' => '/email/i',
-                'mask_length' => 2,
-            ],
-            'phone' => [
-                'pattern' => '/phone/i',
-                'prefix_length' => 2,
-                'suffix_length' => 2,
-                'middle_replacement' => '***',
-            ],
-            'name' => [
-                'pattern' => '/name/i',
-                'mask_length' => 2,
-                'fixed_mask_length' => 4,
-            ],
-        ],
+        'aes' => [
+            'key' => env('PRIVATA_ENCRYPTION_KEY'),
+            'cipher' => env('PRIVATA_ENCRYPTION_CIPHER', 'aes-256-cbc'),
+        ]
     ],
 
     /*
@@ -142,27 +80,47 @@ return [
     'database' => [
         /*
         |--------------------------------------------------------------------------
-        | Foreign Key Suffix
+        | Encrypted Data Suffix
         |--------------------------------------------------------------------------
         |
-        | The suffix to be used for encrypted data foreign key columns in your
-        | tables. Example: if set to "_encrypted_id", a column like
-        | "email_encrypted_id" will be generated.
+        | The suffix appended to attributes that store the encrypted value.
+        | Example: "email" becomes "email_encrypted".
         |
         */
-        'foreign_key_suffix' => '_encrypted_id',
+        'encrypted_data_suffix' => '_encrypted',
 
         /*
         |--------------------------------------------------------------------------
         | Encrypted Timestamp Suffix
         |--------------------------------------------------------------------------
         |
-        | The suffix used for timestamp columns that track when a field was last
-        | encrypted. For example, if this is set to "_encrypted_at", then a
-        | column like "email_encrypted_at" will be used alongside the
-        | "email_encrypted" column to store the encryption timestamp.
+        | The suffix appended to attributes that track when the value was last
+        | encrypted. Example: "email" becomes "email_encrypted_at".
         |
         */
-        'encrypted_timestamp_suffix' => '_encrypted_at'
+        'encrypted_timestamp_suffix' => '_encrypted_at',
+
+        /*
+        |--------------------------------------------------------------------------
+        | Encrypted Masked Suffix
+        |--------------------------------------------------------------------------
+        |
+        | The suffix appended to attributes that store the masked (partially
+        | obfuscated) version of the decrypted value.
+        | Example: "email" becomes "email_masked".
+        |
+        */
+        'encrypted_masked_suffix' => '_masked',
+
+        /*
+        |--------------------------------------------------------------------------
+        | Add Masked Value
+        |--------------------------------------------------------------------------
+        |
+        | Whether to automatically add a masked value field alongside the decrypted
+        | attribute. When true, an extra "{attribute}_masked" field will be included.
+        |
+        */
+        'add_masked_value' => true
     ],
 ];
