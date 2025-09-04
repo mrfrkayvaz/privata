@@ -15,10 +15,10 @@ class EmailMask implements Mask {
 
         [$local, $domain] = explode('@', $data, 2);
 
-        $local = self::maskLocal($local);
+        $local = self::maskLocal($local, $masking_character);
 
         $domainParts = explode('.', $domain);
-        $domainParts[0] = self::maskDomain($domainParts[0]);
+        $domainParts[0] = self::maskDomain($domainParts[0], $masking_character);
         $domain = implode('.', $domainParts);
 
         return $local . '@' . $domain;
