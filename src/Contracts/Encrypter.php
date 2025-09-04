@@ -15,8 +15,8 @@ interface Encrypter
     /**
      * Decrypt the given payload.
      *
-     * @param string $payload
+     * @param string $value
      * @return string
      */
-    public function decrypt(string $payload): string;
+    public function decrypt(string $value): string;
 }
