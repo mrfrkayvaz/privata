@@ -41,11 +41,17 @@
   "require-dev": {
     "orchestra/testbench": "^10.6",
     "pestphp/pest": "^4.0",
-    "pestphp/pest-plugin-laravel": "^4.0"
+    "pestphp/pest-plugin-laravel": "^4.0",
+    "phpstan/phpstan": "^1.10.50"
   },
   "config": {
     "allow-plugins": {
       "pestphp/pest-plugin": true
     }
+  },
+  "scripts": {
+    "test": "vendor/bin/pest",
+    "analyse": "phpstan analyse --memory-limit=1G --no-progress",
+    "baseline": "./vendor/bin/phpstan analyse --memory-limit=2G --generate-baseline"
   }
 }
