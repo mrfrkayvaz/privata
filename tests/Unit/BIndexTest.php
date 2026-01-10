@@ -5,7 +5,6 @@ namespace Privata\Tests;
 use Privata\Tests\Stubs\User;
 
 it('checks whether the encrypted AND query functions correctly', function () {
-    User::create(['email' => 'test3@example.com']);
     User::create(['email' => 'test@example.com']);
 
     $existsFirst = User::whereEncrypted('email', 'test@example.com')->exists();

@@ -66,7 +66,7 @@ trait Encryptable {
         return hash_hmac(
             'sha256',
             $normalized,
-            config('privata.pepper')
+            config('privata.database.pepper')
         );
     }
 
