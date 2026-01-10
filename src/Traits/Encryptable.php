@@ -156,22 +156,33 @@ trait Encryptable {
         $this->setRawAttributes($attributes);
     }
 
-    /**
-     * @param Builder $query
-     * @param string $column
-     * @param mixed $value
-     * @return Builder
-     */
-    public function scopeWhereEncrypted(Builder $query, string $column, string | null $value): Builder {
-        $suffix = config('privata.bindex_data_suffix', '_bindex');
+    public function scopeWhereEncrypted(Builder $query, string $column, string|null $value): Builder
+    {
+        return $this->applyEncryptedSearch($query, $column, $value, 'and');
+    }
+
+    public function scopeOrWhereEncrypted(Builder $query, string $column, string|null $value): Builder
+    {
+        return $this->applyEncryptedSearch($query, $column, $value, 'or');
+    }
+
+    protected function applyEncryptedSearch(Builder $query, string $column, string|null $value, string $boolean = 'and'): Builder
+    {
+        $suffix = config('privata.database.encrypted_bindex_suffix');
         $index_column = $column . $suffix;
+
+        if (is_null($value)) {
+            return $query->where($index_column, null, null, $boolean);
+        }
+
         $normalized_value = strtolower(trim($value));
+
         $blind_index = hash_hmac(
             'sha256',
             $normalized_value,
-            config('privata.pepper')
+            config('privata.database.pepper')
         );
 
-        return $query->where($index_column, $blind_index);
+        return $query->where($index_column, '=', $blind_index, $boolean);
     }
 }
