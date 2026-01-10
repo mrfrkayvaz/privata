@@ -44,6 +44,10 @@ trait Encryptable {
         return config('privata.database.encrypted_masked_suffix');
     }
 
+    public function getUseEncryptedTimestamp(): bool {
+        return config('privata.database.use_encrypted_timestamp');
+    }
+
     public function getEncryptedTimestampSuffix(): string {
         return config('privata.database.encrypted_timestamp_suffix');
     }
@@ -142,12 +146,15 @@ trait Encryptable {
         $encrypted_value = Privata::encrypt($value);
 
         $encrypted_data_field = $attribute . $this->getEncryptedDataSuffix();
+        $use_encrypted_timestamp = $this->getUseEncryptedTimestamp();
         $encrypted_timestamp_field = $attribute . $this->getEncryptedTimestampSuffix();
         $encrypted_bindex_field = $attribute . $this->getEncryptedBindexSuffix();
 
         $attributes = $this->attributes;
         $attributes[$encrypted_data_field] = $encrypted_value;
-        $attributes[$encrypted_timestamp_field] = now();
+        if ($use_encrypted_timestamp) {
+            $attributes[$encrypted_timestamp_field] = now();
+        }
         $attributes[$encrypted_bindex_field] = $this->getEncryptedBIndexValue($value);
 
         if ($attribute != $encrypted_data_field)

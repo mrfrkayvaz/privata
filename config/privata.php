@@ -91,6 +91,18 @@ return [
 
         /*
         |--------------------------------------------------------------------------
+        | Use Encrypted Timestamp
+        |--------------------------------------------------------------------------
+        |
+        | When set to true, the package will automatically update the timestamp
+        | column (defined by encrypted_timestamp_suffix) whenever an
+        | attribute is encrypted or updated.
+        |
+        */
+        'use_encrypted_timestamp' => true,
+
+        /*
+        |--------------------------------------------------------------------------
         | Encrypted Timestamp Suffix
         |--------------------------------------------------------------------------
         |
