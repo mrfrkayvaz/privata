@@ -5,6 +5,7 @@ namespace Privata\Traits;
 use Privata\Facades\Privata;
 use Privata\Masks\StringMask;
 use Privata\Services\EncryptionService;
+use Illuminate\Database\Eloquent\Builder;
 
 trait Encryptable {
     protected function encrypted(): array {
@@ -47,8 +48,22 @@ trait Encryptable {
         return config('privata.database.encrypted_timestamp_suffix');
     }
 
+    public function getEncryptedBIndexSuffix(): string {
+        return config('privata.database.encrypted_bindex_suffix');
+    }
+
     public function getAddMaskedValue(): bool {
         return config('privata.database.add_masked_value');
+    }
+
+    public function getEncryptedBIndexValue(string $value): string {
+        $normalized = strtolower(trim($value));
+
+        return hash_hmac(
+            'sha256',
+            $normalized,
+            config('privata.pepper')
+        );
     }
 
     public function getHidden(): array
@@ -128,14 +143,35 @@ trait Encryptable {
 
         $encrypted_data_field = $attribute . $this->getEncryptedDataSuffix();
         $encrypted_timestamp_field = $attribute . $this->getEncryptedTimestampSuffix();
+        $encrypted_bindex_field = $attribute . $this->getEncryptedBindexSuffix();
 
         $attributes = $this->attributes;
         $attributes[$encrypted_data_field] = $encrypted_value;
         $attributes[$encrypted_timestamp_field] = now();
+        $attributes[$encrypted_bindex_field] = $this->getEncryptedBIndexValue($value);
 
         if ($attribute != $encrypted_data_field)
             unset($attributes[$attribute]);
 
         $this->setRawAttributes($attributes);
+    }
+
+    /**
+     * @param Builder $query
+     * @param string $column
+     * @param mixed $value
+     * @return Builder
+     */
+    public function scopeWhereEncrypted(Builder $query, string $column, string | null $value): Builder {
+        $suffix = config('privata.bindex_data_suffix', '_bindex');
+        $index_column = $column . $suffix;
+        $normalized_value = strtolower(trim($value));
+        $blind_index = hash_hmac(
+            'sha256',
+            $normalized_value,
+            config('privata.pepper')
+        );
+
+        return $query->where($index_column, $blind_index);
     }
 }

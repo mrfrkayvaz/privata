@@ -114,6 +114,40 @@ return [
 
         /*
         |--------------------------------------------------------------------------
+        | Blind Index Pepper
+        |--------------------------------------------------------------------------
+        |
+        | The "pepper" is a secret key used to generate keyed-hashes (HMAC) for
+        | searchable encrypted data. Unlike a "salt" which is stored in the
+        | database, the pepper is kept secret within your application code
+        | or environment variables.
+        |
+        | This prevents attackers from performing rainbow table or frequency
+        | analysis attacks if the database is compromised, as they would
+        | still lack the secret pepper required to compute the hashes.
+        |
+        | CAUTION: If the pepper is changed or lost, all existing search
+        | indexes (bindex fields) will become unsearchable.
+        |
+        */
+
+        'pepper' => env('PRIVATA_PEPPER'),
+
+        /*
+        |--------------------------------------------------------------------------
+        | Encrypted Blind Index Suffix
+        |--------------------------------------------------------------------------
+        |
+        | The suffix appended to attributes that store the searchable hash (Blind Index).
+        | This allows for exact-match lookups on encrypted data without
+        | compromising the randomness of the primary encryption.
+        | Example: "email" becomes "email_bindex".
+        |
+        */
+        'encrypted_bindex_suffix' => '_bindex',
+
+        /*
+        |--------------------------------------------------------------------------
         | Add Masked Value
         |--------------------------------------------------------------------------
         |
@@ -121,6 +155,6 @@ return [
         | attribute. When true, an extra "{attribute}_masked" field will be included.
         |
         */
-        'add_masked_value' => true
+        'add_masked_value' => true,
     ],
 ];

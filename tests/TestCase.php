@@ -23,6 +23,7 @@ class TestCase extends Orchestra
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('email_encrypted', 200);
+            $table->string('email_bindex', 64);
             $table->timestamp('email_encrypted_at')->nullable();
             $table->timestamps();
         });
