@@ -94,7 +94,6 @@ trait Encryptable {
     {
         foreach ($this->encrypted() as $attribute) {
             $this->applyGetMutator($attribute);
-            $this->syncOriginalAttribute($attribute);
         }
     }
 

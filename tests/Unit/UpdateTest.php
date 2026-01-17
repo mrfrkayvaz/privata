@@ -2,16 +2,18 @@
 
 namespace Privata\Tests;
 
-use Illuminate\Support\Facades\DB;
 use Privata\Tests\Stubs\User;
 
 it('updates another field of user', function () {
     $user = User::create(['email' => 'test@example.com']);
 
     $user->update([
+        'email' => 'test@gmail.com',
         'status' => true
     ]);
 
     expect($user->status)
-        ->toBeTrue();
+        ->toBeTrue()
+        ->and($user->email)
+        ->toBe('test@gmail.com');
 });
