@@ -94,6 +94,18 @@ trait Encryptable {
     {
         foreach ($this->encrypted() as $attribute) {
             $this->applyGetMutator($attribute);
+
+            $this->syncOriginalAttribute($attribute);
+
+            $masked_field = $attribute . $this->getEncryptedMaskedSuffix();
+            if (isset($this->attributes[$masked_field])) {
+                $this->syncOriginalAttribute($masked_field);
+            }
+
+            $encrypted_data_field = $attribute . $this->getEncryptedDataSuffix();
+            if (!isset($this->attributes[$encrypted_data_field])) {
+                unset($this->original[$encrypted_data_field]);
+            }
         }
     }
 
