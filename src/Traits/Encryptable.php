@@ -6,7 +6,6 @@ use Privata\Facades\Privata;
 use Privata\Masks\StringMask;
 use Privata\Services\EncryptionService;
 use Illuminate\Database\Eloquent\Builder;
-use Privata\Tests\Stubs\User;
 
 trait Encryptable {
     protected function encrypted(): array {
@@ -95,6 +94,7 @@ trait Encryptable {
     {
         foreach ($this->encrypted() as $attribute) {
             $this->applyGetMutator($attribute);
+            $this->syncOriginalAttribute($attribute);
         }
     }
 
@@ -141,7 +141,9 @@ trait Encryptable {
 
     protected function applySetMutator(string $attribute): void
     {
-        if (!isset($this->attributes[$attribute])) return;
+        if (!isset($this->attributes[$attribute]) || !$this->isDirty($attribute)) {
+            return;
+        }
 
         $value = $this->attributes[$attribute];
         $encrypted_value = Privata::encrypt($value);

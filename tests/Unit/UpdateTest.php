@@ -2,6 +2,7 @@
 
 namespace Privata\Tests;
 
+use Illuminate\Support\Facades\DB;
 use Privata\Tests\Stubs\User;
 
 it('updates another field of user', function () {
