@@ -25,6 +25,7 @@ class TestCase extends Orchestra
             $table->string('email_encrypted', 200);
             $table->string('email_bindex', 64);
             $table->timestamp('email_encrypted_at')->nullable();
+            $table->boolean('status')->default(false);
             $table->timestamps();
         });
     }

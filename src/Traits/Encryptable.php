@@ -6,6 +6,7 @@ use Privata\Facades\Privata;
 use Privata\Masks\StringMask;
 use Privata\Services\EncryptionService;
 use Illuminate\Database\Eloquent\Builder;
+use Privata\Tests\Stubs\User;
 
 trait Encryptable {
     protected function encrypted(): array {
@@ -66,7 +67,7 @@ trait Encryptable {
         return hash_hmac(
             'sha256',
             $normalized,
-            config('privata.pepper')
+            config('privata.database.pepper')
         );
     }
 
